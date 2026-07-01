@@ -6,9 +6,9 @@ Learn how to configure and use file access policy in Red Hat Enterprise Linux.
 
 *Maintainer:* Joshua Loscar (jloscar@redhat.com)
 
-*Creator*: Nate Lager
+*Creator:* Nate Lager
 
-*Contributors* Wilson Harris, Will Kibbe, Matthew Micene, Billy Bethell
+*Contributors:* Wilson Harris, Will Kibbe, Matthew Micene, Billy Bethell
 
 == Description
 
