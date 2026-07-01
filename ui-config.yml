@@ -1,0 +1,26 @@
+---
+
+antora:
+  name: modules
+  dir: www
+  modules:
+    - name: module-01
+      label: "Install"
+      solveButton: true
+    - name: module-02
+      label: "Verify"
+      solveButton: true
+    - name: module-03
+      label: "Update"
+      solveButton: true
+    - name: module-04
+      label: "Explore"
+      solveButton: true
+    - name: module-05
+      label: "Integrity Controls"
+      solveButton: true
+
+tabs:
+  - name: ">_ terminal"
+    url: /wetty
+

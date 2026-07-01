@@ -1,0 +1,44 @@
+Now that we’ve seen how the daemon is configured, let’s see it in
+action.
+
+Let’s install a new application from an internet source, `+cowsay+`.
+There is nothing inherently malicious about this binary, though it
+provides a good example for our application control workflow.
+Extract `+cowsay+` into the user’s home directory.
+
+[source,bash,run]
+----
+tar xsf cowsay_2.0.4_Linux_x86_64.tar.gz
+----
+
+You should have no problems executing the `+cowsay+` binary:
+
+[source,bash,run]
+----
+./cowsay "mooooo"
+----
+
+Let’s start up fapolicyd and see what happens:
+
+[source,bash,run]
+----
+sudo systemctl start fapolicyd
+----
+
+Now run the `+cowsay+` command again.
+
+[source,bash,run]
+----
+./cowsay "mooooo"
+----
+
+You’ll obtain the following error.
+
+[source,text]
+----
+-bash: ./cowsay: Operation not permitted
+----
+
+Great! Because the `+cowsay+` binary isn’t in the RPM database, or the
+file-backed trust database configured at
+`+/etc/fapolicyd/fapolicyd.trust+`, the execution is blocked.
