@@ -14,7 +14,7 @@ lab:
       - "Verify fapolicyd configuration and block unauthorized applications"
       - "Create a file-based trust database to allow trusted applications"
       - "Configure integrity checking for fapolicyd"  
-    use_case: "Get familliar with the new image mode for RHEL operating model"
+    use_case: "Get familliar with fapolicyd on RHEL"
     time_to_complete: "30" # time in minutes
     
   # Git references for deployment
