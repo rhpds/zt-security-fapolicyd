@@ -1,34 +1,56 @@
-Let’s take a quick look at fapolicyd and integrity. The `+more+` command
-is installed via the RPM database, so it’s trusted to execute on the
-system:
+= Explore Integrity Checking
 
-[source,bash,run]
+== Overview
+
+Adding a binary to the trust database allows execution based on file location, but what happens if a trusted binary is replaced with something malicious? In this module, you'll explore fapolicyd's default behavior when a trusted executable is substituted.
+
+== Step 1: Identify a Trusted Binary
+
+The `more` command is installed via the RPM database, so it's trusted to execute on the system:
+
+[source,bash,role=execute]
 ----
 sudo rpm -qf /bin/more
 ----
 
-What if the more command was substituted out for something malicious?
-First, let’s verify that fapolicyd is still running:
+== Step 2: Verify fapolicyd Is Running
 
-[source,bash,run]
+First, let's verify that fapolicyd is still running:
+
+[source,bash,role=execute]
 ----
 sudo systemctl status fapolicyd
 ----
 
-Now let’s substitute the `+more+` command for the `+cowsay+` binary in
-our user’s home directory:
+== Step 3: Substitute a Trusted Binary
 
-[source,bash,run]
+Now let's substitute the `more` command for the `cowsay` binary in our user's home directory:
+
+[source,bash,role=execute]
 ----
 sudo /bin/cp ./cowsay /bin/more
 ----
 
-[source,bash,run]
+== Step 4: Execute the Substituted Binary
+
+Run the substituted binary:
+
+[source,bash,role=execute]
 ----
 /bin/more "mooooo"
 ----
 
-Hmmmm. So by default, fapolicyd doesn’t check what the file looks like,
-only where it is executing from. This means that an attacker could
-potentially hijack the execution path of a trusted file, and execute
-malicious code on behalf of a user.
+[IMPORTANT]
+====
+By default, fapolicyd doesn't check what the file looks like—only where it is executing from. This means that an attacker could potentially hijack the execution path of a trusted file and execute malicious code on behalf of a user.
+====
+
+== Summary
+
+In this module, you've:
+
+* Identified a trusted binary installed via the RPM database
+* Substituted a trusted system binary with an untrusted executable
+* Observed that fapolicyd allows the substituted binary to run without integrity checking enabled
+
+Click "Next" to configure SHA-256 integrity checking to mitigate this risk.

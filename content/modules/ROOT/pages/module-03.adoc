@@ -1,50 +1,70 @@
-What if we know that the `+cowsay+` binary is trusted, and we want to
-allow it on the system? We have a couple of options:
+= Update the Trust Database
 
-* We could create a RPM spec file for the binary, build an RPM, sign it,
-and install it into the RPM database
-* We can update the file-backed trust database
+== Overview
 
-The second option seems better for this scenario - let’s update the
-file-backed trust database. We can use the `+fapolicyd-cli+` to update
-the trust source:
+What if you know that the `cowsay` binary is trusted and you want to allow it on the system? You have a couple of options:
 
-[source,bash,run]
+* Create an RPM spec file for the binary, build an RPM, sign it, and install it into the RPM database
+* Update the file-backed trust database
+
+The second option is better for this scenario. Let's update the file-backed trust database to allow `cowsay`.
+
+== Step 1: Add the Binary to the Trust Database
+
+Use `fapolicyd-cli` to update the trust source:
+
+[source,bash,role=execute]
 ----
 sudo fapolicyd-cli --file add /home/rhel/cowsay
 ----
 
-If we take a look at the file `+/etc/fapolicyd/fapolicyd.trust+` we can
-see that changes that have been made:
+== Step 2: Review Trust Database Entries
 
-[source,bash,run]
+If we take a look at the file `/etc/fapolicyd/fapolicyd.trust`, we can see the changes that have been made:
+
+[source,bash,role=execute]
 ----
 sudo cat /etc/fapolicyd/fapolicyd.trust
 ----
 
-* The full-path to the file is listed (`+/home/rhel/cowsay+`)
-* The size of the file has been calculated and added
-* The SHA-256 hash for the file has been calculated and added
+The trust entry includes:
 
-Remember that we have `+integrity = none+` in our fapolicyd config file?
-These last two attributes - size and the SHA-256 has - are used for
-integrity checking. We’ll take a closer look at this in the next step of
-the lab.
+* The full path to the file (`/home/rhel/cowsay`)
+* The size of the file, calculated and added automatically
+* The SHA-256 hash for the file, calculated and added automatically
 
-Now you can update the daemon:
+[NOTE]
+====
+Remember that we have `integrity = none` in our fapolicyd config file. The size and SHA-256 hash attributes are used for integrity checking, which we'll explore in a later module.
+====
 
-[source,bash,run]
+== Step 3: Update the Daemon
+
+Now update the daemon to apply the trust database changes:
+
+[source,bash,role=execute]
 ----
 sudo fapolicyd-cli --update
 ----
 
-Let’s try the binary again:
+== Step 4: Verify Trusted Execution
 
-[source,bash,run]
+Let's try the binary again:
+
+[source,bash,role=execute]
 ----
 ./cowsay "mooooo"
 ----
 
-Success! We’ve verified that fapolicyd can block unauthorized processes
-and applications on a system, and that we can manage exceptions for
-trusted applications.
+Success! We've verified that fapolicyd can block unauthorized processes and applications on a system, and that we can manage exceptions for trusted applications.
+
+== Summary
+
+In this module, you've learned:
+
+* Two approaches for trusting applications: RPM packaging and the file-backed trust database
+* How to add a binary to the trust database with `fapolicyd-cli --file add`
+* How trust entries record file path, size, and SHA-256 hash
+* How to apply trust database changes with `fapolicyd-cli --update`
+
+Click "Next" to explore fapolicyd integrity checking in the next module.

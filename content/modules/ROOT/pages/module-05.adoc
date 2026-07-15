@@ -1,49 +1,65 @@
-To mitigate situations where a trusted binary is substituted, fapolicyd
-supports different types of file integrity:
+= Configure Integrity Controls
 
-* File-size checking - this is a very fast method of integrity checking,
-where fapolicyd verifies that the file is the correct size before
-allowing execution
-* Comparing SHA-256 hashes - computing and checking SHA-256 checksums is
-more secure than file-size checking, but does have an impact on system
-performance.
-* Integrity Measurement Architecture (IMA) subsystem - IMA can be used
-by fapolicyd to support file integrity checks.
+== Overview
 
-For this scenario we’re going to use SHA-256 hashes to verify file
-integrity. This provides a good balance between speed and security, and
-is simple to setup and maintain.
+To mitigate situations where a trusted binary is substituted, fapolicyd supports different types of file integrity:
 
-You can configure integrity in the `+/etc/fapolicyd/fapolicyd.conf+`
-file:
+* **File-size checking** - A very fast method where fapolicyd verifies that the file is the correct size before allowing execution
+* **SHA-256 hashes** - Computing and checking SHA-256 checksums is more secure than file-size checking, but does have an impact on system performance
+* **Integrity Measurement Architecture (IMA)** - The IMA subsystem can be used by fapolicyd to support file integrity checks
 
-[source,bash,run]
+For this scenario, we're going to use SHA-256 hashes to verify file integrity. This provides a good balance between speed and security, and is simple to set up and maintain.
+
+== Step 1: Enable SHA-256 Integrity Checking
+
+Configure integrity in the `/etc/fapolicyd/fapolicyd.conf` file:
+
+[source,bash,role=execute]
 ----
 sudo sed -i 's/integrity.*/integrity = sha256/' /etc/fapolicyd/fapolicyd.conf
 ----
 
-Restart the daemon:
+== Step 2: Restart the Daemon
 
-[source,bash,run]
+Restart the daemon to apply the configuration change:
+
+[source,bash,role=execute]
 ----
 sudo systemctl restart fapolicyd
 ----
 
+== Step 3: Verify Integrity Checking
+
 We can now verify whether file integrity checking is performed:
 
-[source,bash,run]
+[source,bash,role=execute]
 ----
 /bin/more "mooooooo"
 ----
+
 [source,text]
 ----
 -bash: /bin/more: Operation not permitted
 ----
 
-Success! We’ve now mitigated the risk of an attacker hijacking a trusted
-binary on the system, by configuring fapolicyd integrity controls.
+Success! We've now mitigated the risk of an attacker hijacking a trusted binary on the system by configuring fapolicyd integrity controls.
 
-You've now explored how to manage and configure the File Access Policy Daemon (fapolicyd) 
-to control the execution of applications. Hopefully you can see how this
-can be of use in your environment. To explore other adminstrative tools, please
-check out another of our labs.
+== Summary
+
+In this module, you've learned:
+
+* The three integrity checking methods supported by fapolicyd: file-size, SHA-256, and IMA
+* How to enable SHA-256 integrity checking in `/etc/fapolicyd/fapolicyd.conf`
+* How integrity checking blocks execution when a trusted binary has been substituted
+
+== Lab Complete!
+
+Congratulations! You've completed the File Access Policy (fapolicyd) lab. You now know how to:
+
+✓ Install and configure fapolicyd
+✓ Verify that fapolicyd blocks unauthorized applications
+✓ Update the file-backed trust database for trusted binaries
+✓ Understand the limits of trust without integrity checking
+✓ Configure SHA-256 integrity controls to protect trusted executables
+
+You've now explored how to manage and configure the File Access Policy Daemon (fapolicyd) to control the execution of applications. To explore other administrative tools, check out another of our labs.

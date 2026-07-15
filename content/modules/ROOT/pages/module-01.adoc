@@ -1,17 +1,26 @@
-The File Access Policy Daemon (fapolicyd) controls the execution of
-applications based on a user-defined policy, and is one of the most
-effective ways to mitigate the risk of untrusted and possibly malicious
-applications on the system.
+= Installation & Configuration
 
-First, verify the install of fapolicyd on your Red Hat Enterprise Linux
-system.
+== Overview
 
-[source,bash,run]
+The File Access Policy Daemon (fapolicyd) controls the execution of applications based on a user-defined policy. It is one of the most effective ways to mitigate the risk of untrusted and possibly malicious applications on the system.
+
+Application control helps protect against unauthorized process execution. When implemented correctly, fapolicyd can block binaries that are not trusted by the system's configured trust sources.
+
+[NOTE]
+====
+This lab uses RHEL, where the fapolicyd package is available but the service is disabled by default until you explicitly enable it.
+====
+
+== Step 1: Verify fapolicyd Installation
+
+First, verify that fapolicyd is installed on your Red Hat Enterprise Linux system:
+
+[source,bash,role=execute]
 ----
 sudo systemctl status fapolicyd
 ----
 
-The service exists but is disabled by default on installation.
+The service exists but is disabled by default on installation:
 
 [source,text]
 ----
@@ -20,25 +29,33 @@ The service exists but is disabled by default on installation.
      Active: inactive (dead)
 ----
 
-Next, inspect the fapolicyd configuration that has been created.
+== Step 2: Review Default Configuration
 
-[source,bash,run]
+Next, inspect the fapolicyd configuration that has been created:
+
+[source,bash,role=execute]
 ----
 sudo cat /etc/fapolicyd/fapolicyd.conf
 ----
 
-We can see a couple of things have been configured for us by default:
+Several important settings are configured by default:
 
-* The daemon is configured in enforcing mode (`+permissive = 0+`),
-meaning all unauthorized processes will be blocked. We can optionally
-configure the daemon for permissive mode and to log unauthorized
-processes, rather than block them.
-* A new user has been created on the system for the daemon
-(`+uid = fapolicyd+`)
-* The default sources of trust are the RPM database and a file-backed
-trust database. This means that any packages installed into the RPM
-database will be trusted by default. In addition, a file is configured
-at `+/etc/fapolicyd/fapolicyd.trust+` which can be used for third-party
-binaries and other applications not present in the RPM database.
-* There is currently no integrity checking configured
-(`+integrity = none+`)
+* **permissive = 0** - The daemon runs in enforcing mode, meaning all unauthorized processes will be blocked. You can optionally configure permissive mode to log unauthorized processes rather than block them.
+* **uid = fapolicyd** - A dedicated user has been created on the system for the daemon.
+* **Trust sources** - The default sources of trust are the RPM database and a file-backed trust database. Any packages installed into the RPM database are trusted by default. The file at `/etc/fapolicyd/fapolicyd.trust` can be used for third-party binaries and other applications not present in the RPM database.
+* **integrity = none** - There is currently no integrity checking configured.
+
+[TIP]
+====
+The file-backed trust database at `/etc/fapolicyd/fapolicyd.trust` is useful for allowing third-party or locally compiled binaries without packaging them as RPMs.
+====
+
+== Summary
+
+In this module, you've:
+
+* Verified the fapolicyd installation and service status
+* Reviewed the default configuration in `/etc/fapolicyd/fapolicyd.conf`
+* Identified the default trust sources and integrity settings
+
+Click "Next" to see fapolicyd block an unauthorized application in the next module.
