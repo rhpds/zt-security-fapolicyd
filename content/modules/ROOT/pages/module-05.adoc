@@ -56,10 +56,10 @@ In this module, you've learned:
 
 Congratulations! You've completed the File Access Policy (fapolicyd) lab. You now know how to:
 
-✓ Install and configure fapolicyd
-✓ Verify that fapolicyd blocks unauthorized applications
-✓ Update the file-backed trust database for trusted binaries
-✓ Understand the limits of trust without integrity checking
-✓ Configure SHA-256 integrity controls to protect trusted executables
+* Install and configure fapolicyd
+* Verify that fapolicyd blocks unauthorized applications
+* Update the file-backed trust database for trusted binaries
+* Understand the limits of trust without integrity checking
+* Configure SHA-256 integrity controls to protect trusted executables
 
 You've now explored how to manage and configure the File Access Policy Daemon (fapolicyd) to control the execution of applications. To explore other administrative tools, check out another of our labs.
