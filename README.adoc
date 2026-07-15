@@ -1,44 +1,77 @@
 = Security: File Access Policy (fapolicyd) Lab
+:toc:
+:icons: font
+:experimental:
 
-== Overview
+== Objective
+
+By the end of this guided lab exercise, you will be able to:
+
+* Deploy and manage application control on Red Hat Enterprise Linux systems.
+* Install the File Access Policy Daemon (fapolicyd).
+* Verify fapolicyd configuration and block unauthorized applications.
+* Create a file-based trust database to allow trusted applications.
+* Configure integrity checking for fapolicyd.
+
+== Introduction
 
 Learn how to configure and use file access policy in Red Hat Enterprise Linux.
 
-*Maintainer:* Joshua Loscar (jloscar@redhat.com)
+In this lab, you will configure application control for Red Hat Enterprise Linux systems. Application control is a security approach designed to protect against unauthorized process execution on systems. When implemented correctly, application control helps mitigate the risk of malicious code (malware), such as ransomware, executing on a system.
 
-*Creator:* Nate Lager
+The File Access Policy Daemon (fapolicyd) controls the execution of applications based on a user-defined policy, and is one of the most effective ways to mitigate the risk of untrusted and possibly malicious applications on the system.
 
-*Contributors:* Wilson Harris, Will Kibbe, Matthew Micene, Billy Bethell
+=== Lab Modules
 
-== Description
+. *Install* — Install and configure the File Access Policy Daemon
+. *Verify* — Verify fapolicyd is blocking unauthorized applications
+. *Update* — Update the trust database to allow trusted applications
+. *Explore* — Explore fapolicyd integrity checking capabilities
+. *Integrity Controls* — Configure SHA-256 integrity checking
 
-After completing this scenario, users will be able to deploy and manage application control on Red Hat Enterprise Linux systems.
+== Lab Environment
 
-== Concepts Covered
+As part of this lab you will have access to 1 machine:
 
-* Install File Access Policy Daemon (fapolicyd)
-* Verify fapolicyd configuration and block unauthorized applications
-* Create a file-based trust database to allow trusted applications
-* Configure integrity checking for fapolicyd
+* rhel
 
-== Use Case
+* **Operating System**: Red Hat Enterprise Linux
+* **Estimated Time**: Approximately 30 minutes
 
-In this lab, you are going to configure application control for Red Hat Enterprise Linux systems. Application control is a security approach designed to protect against unauthorized process execution on systems. When implemented correctly, application control helps mitigate the risk of malicious code (malware), such as ransomware, executing on a system.
+=== Environment Diagram
 
-== Time to Complete
+[source,text]
+----
+                         Lab Environment
+    ┌──────────────────────────────────────────────────────┐
+    │                                                      │
+    │   ┌──────────────┐              ┌──────────────┐    │
+    │   │   bastion    │    SSH       │     rhel     │    │
+    │   │              │─────────────▶│              │    │
+    │   │    rhel      │              │  rhel, root  │    │
+    │   └──────────────┘              └──────────────┘    │
+    │                                                      │
+    └──────────────────────────────────────────────────────┘
+----
 
-Approximately 30 minutes
+You will have a couple of accounts you will have access to.
 
-== Lab Structure
+*rhel*
 
-This lab contains 5 modules:
+* rhel
+* root
 
-1. *Install* - Install and configure the File Access Policy Daemon
-2. *Verify* - Verify fapolicyd is blocking unauthorized applications
-3. *Update* - Update the trust database to allow trusted applications
-4. *Explore* - Explore fapolicyd integrity checking capabilities
-5. *Integrity Controls* - Configure SHA-256 integrity checking
+[NOTE]
+====
+*Lab Note: If Using Red Hat Demo System (RHPDS)*
 
-== Development
+The terminal window to your right is already logged into the lab environment as the `rhel` user via SSH. All steps of this lab are to be completed as the `rhel` user on the bastion server.
 
-This lab was migrated from the rhpds/zt-file-access-policy repository to follow the ZeroTouch lab template standards.
+When you follow the next steps, you will have instructions followed by a small box with text that is meant to be used in the terminal. In the upper right corner there will be a couple of symbols. It should say something like "BASH", an icon of a clipboard, and an icon of a terminal.
+
+You should also be able to click the terminal icon and the command is then auto-typed into the machine terminal.
+
+Alternatively, you should be able to click the clipboard icon in the code box to copy the command, and you will either use the middle mouse button or right click and paste. The keyboard shortcuts for copy and paste (`Ctrl+C` and `Ctrl+V`) won't work in this environment.
+
+To move to the next step, click the *Next* button.
+====
