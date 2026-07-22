@@ -16,6 +16,9 @@ sudo rpm -qf /bin/more
 sudo systemctl status fapolicyd
 ----
 
+You may need to "Ctrl+c" on your keyboard to close out the systemctl status.
+
+
 **5.3** Now let's substitute the `more` command for the `cowsay` binary in our user's home directory:
 [source,bash,role="execute",subs=attributes+]
 ----
