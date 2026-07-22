@@ -2,7 +2,7 @@
 # Single Point of Truth for Lab Information
 
 lab:
-  name: "Security File Access Policy (fapolicyd) Lab"
+  name: "Enabling RHEL Security: FAPolicyD 101"
   shortname: "zt-security-fapolicyd"
   maintainer: "Joshua Loscar (jloscar@redhat.com)" 
   
