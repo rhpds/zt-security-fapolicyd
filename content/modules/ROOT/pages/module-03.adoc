@@ -1,70 +1,60 @@
-= Update the Trust Database
+## Step 3
+
+= Verify Application Blocking
 
 == Overview
 
-What if you know that the `cowsay` binary is trusted and you want to allow it on the system? You have a couple of options:
+Now that you've seen how the daemon is configured, let's see fapolicyd in action. You'll install an application from an internet source and observe how fapolicyd blocks execution of untrusted binaries.
 
-* Create an RPM spec file for the binary, build an RPM, sign it, and install it into the RPM database
-* Update the file-backed trust database
+== Step 1: Extract an Untrusted Application
 
-The second option is better for this scenario. Let's update the file-backed trust database to allow `cowsay`.
+Let's install a new application from an internet source, `cowsay`. There is nothing inherently malicious about this binary, though it provides a good example for our application control workflow.
 
-== Step 1: Add the Binary to the Trust Database
+Extract `cowsay` into the user's home directory:
 
-Use `fapolicyd-cli` to update the trust source:
-
-[source,bash,role=execute]
+[source,bash,role="execute",subs=attributes+]
 ----
-sudo fapolicyd-cli --file add /home/rhel/cowsay
+tar xsf cowsay_2.0.4_Linux_x86_64.tar.gz
 ----
 
-== Step 2: Review Trust Database Entries
+== Step 2: Execute Before fapolicyd Is Running
 
-If we take a look at the file `/etc/fapolicyd/fapolicyd.trust`, we can see the changes that have been made:
+You should have no problems executing the `cowsay` binary while fapolicyd is stopped:
 
-[source,bash,role=execute]
-----
-sudo cat /etc/fapolicyd/fapolicyd.trust
-----
-
-The trust entry includes:
-
-* The full path to the file (`/home/rhel/cowsay`)
-* The size of the file, calculated and added automatically
-* The SHA-256 hash for the file, calculated and added automatically
-
-[NOTE]
-====
-Remember that we have `integrity = none` in our fapolicyd config file. The size and SHA-256 hash attributes are used for integrity checking, which we'll explore in a later module.
-====
-
-== Step 3: Update the Daemon
-
-Now update the daemon to apply the trust database changes:
-
-[source,bash,role=execute]
-----
-sudo fapolicyd-cli --update
-----
-
-== Step 4: Verify Trusted Execution
-
-Let's try the binary again:
-
-[source,bash,role=execute]
+[source,bash,role="execute",subs=attributes+]
 ----
 ./cowsay "mooooo"
 ----
 
-Success! We've verified that fapolicyd can block unauthorized processes and applications on a system, and that we can manage exceptions for trusted applications.
+== Step 3: Start fapolicyd
 
-== Summary
+Let's start up fapolicyd and see what happens:
 
-In this module, you've learned:
+[source,bash,role="execute",subs=attributes+]
+----
+sudo systemctl start fapolicyd
+----
 
-* Two approaches for trusting applications: RPM packaging and the file-backed trust database
-* How to add a binary to the trust database with `fapolicyd-cli --file add`
-* How trust entries record file path, size, and SHA-256 hash
-* How to apply trust database changes with `fapolicyd-cli --update`
+== Step 4: Attempt Execution Again
 
-Click "Next" to explore fapolicyd integrity checking in the next module.
+Now run the `cowsay` command again:
+
+[source,bash,role="execute",subs=attributes+]
+----
+./cowsay "mooooo"
+----
+
+You'll obtain the following error:
+
+[source,bash,role="execute",subs=attributes+]
+----
+-bash: ./cowsay: Operation not permitted
+----
+
+[IMPORTANT]
+====
+Because the `cowsay` binary isn't in the RPM database or the file-backed trust database configured at `/etc/fapolicyd/fapolicyd.trust`, the execution is blocked.
+====
+
+
+Click "Next" to learn how to add trusted applications to the file-backed trust database.

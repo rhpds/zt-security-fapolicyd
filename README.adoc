@@ -1,4 +1,4 @@
-= Security: File Access Policy (fapolicyd) Lab
+= Welcome to Enabling RHEL Security: FAPolicyD 101
 :toc:
 :icons: font
 :experimental:
@@ -45,11 +45,11 @@ As part of this lab you will have access to 1 machine:
                          Lab Environment
     ┌──────────────────────────────────────────────────────┐
     │                                                      │
-    │   ┌──────────────┐              ┌──────────────┐    │
-    │   │   bastion    │    SSH       │     rhel     │    │
-    │   │              │─────────────▶│              │    │
-    │   │    rhel      │              │  rhel, root  │    │
-    │   └──────────────┘              └──────────────┘    │
+    │   ┌──────────────┐                                   │
+    │   │   bastion    │                                   │
+    │   │              │                                   │
+    │   │    rhel      │                                   │
+    │   └──────────────┘                                   │
     │                                                      │
     └──────────────────────────────────────────────────────┘
 ----

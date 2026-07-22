@@ -1,61 +1,77 @@
-= Installation & Configuration
+= Welcome to Enabling RHEL Security: FAPolicyD 101
+:toc:
+:icons: font
+:experimental:
 
-== Overview
+== Objective
 
-The File Access Policy Daemon (fapolicyd) controls the execution of applications based on a user-defined policy. It is one of the most effective ways to mitigate the risk of untrusted and possibly malicious applications on the system.
+By the end of this guided lab exercise, you will be able to:
 
-Application control helps protect against unauthorized process execution. When implemented correctly, fapolicyd can block binaries that are not trusted by the system's configured trust sources.
+* Deploy and manage application control on Red Hat Enterprise Linux systems.
+* Install the File Access Policy Daemon (fapolicyd).
+* Verify fapolicyd configuration and block unauthorized applications.
+* Create a file-based trust database to allow trusted applications.
+* Configure integrity checking for fapolicyd.
 
-[NOTE]
-====
-This lab uses RHEL, where the fapolicyd package is available but the service is disabled by default until you explicitly enable it.
-====
+== Introduction
 
-== Step 1: Verify fapolicyd Installation
+Learn how to configure and use file access policy in Red Hat Enterprise Linux.
 
-First, verify that fapolicyd is installed on your Red Hat Enterprise Linux system:
+In this lab, you will configure application control for Red Hat Enterprise Linux systems. Application control is a security approach designed to protect against unauthorized process execution on systems. When implemented correctly, application control helps mitigate the risk of malicious code (malware), such as ransomware, executing on a system.
 
-[source,bash,role=execute]
-----
-sudo systemctl status fapolicyd
-----
+The File Access Policy Daemon (fapolicyd) controls the execution of applications based on a user-defined policy, and is one of the most effective ways to mitigate the risk of untrusted and possibly malicious applications on the system.
 
-The service exists but is disabled by default on installation:
+=== Lab Modules
+
+. *Install* — Install and configure the File Access Policy Daemon
+. *Verify* — Verify fapolicyd is blocking unauthorized applications
+. *Update* — Update the trust database to allow trusted applications
+. *Explore* — Explore fapolicyd integrity checking capabilities
+. *Integrity Controls* — Configure SHA-256 integrity checking
+
+== Lab Environment
+
+As part of this lab you will have access to 1 machine:
+
+* rhel
+
+* **Operating System**: Red Hat Enterprise Linux
+* **Estimated Time**: Approximately 30 minutes
+
+=== Environment Diagram
 
 [source,text]
 ----
-○ fapolicyd.service - File Access Policy Daemon
-     Loaded: loaded (/usr/lib/systemd/system/fapolicyd.service; disabled; preset: disabled)
-     Active: inactive (dead)
+                         Lab Environment
+    ┌──────────────────────────────────────────────────────┐
+    │                                                      │
+    │   ┌──────────────┐                                   │
+    │   │   bastion    │                                   │
+    │   │              │                                   │
+    │   │    rhel      │                                   │
+    │   └──────────────┘                                   │
+    │                                                      │
+    └──────────────────────────────────────────────────────┘
 ----
 
-== Step 2: Review Default Configuration
+You will have a couple of accounts you will have access to.
 
-Next, inspect the fapolicyd configuration that has been created:
+*rhel*
 
-[source,bash,role=execute]
-----
-sudo cat /etc/fapolicyd/fapolicyd.conf
-----
+* rhel
+* root
 
-Several important settings are configured by default:
-
-* **permissive = 0** - The daemon runs in enforcing mode, meaning all unauthorized processes will be blocked. You can optionally configure permissive mode to log unauthorized processes rather than block them.
-* **uid = fapolicyd** - A dedicated user has been created on the system for the daemon.
-* **Trust sources** - The default sources of trust are the RPM database and a file-backed trust database. Any packages installed into the RPM database are trusted by default. The file at `/etc/fapolicyd/fapolicyd.trust` can be used for third-party binaries and other applications not present in the RPM database.
-* **integrity = none** - There is currently no integrity checking configured.
-
-[TIP]
+[NOTE]
 ====
-The file-backed trust database at `/etc/fapolicyd/fapolicyd.trust` is useful for allowing third-party or locally compiled binaries without packaging them as RPMs.
+*Lab Note: If Using Red Hat Demo System (RHPDS)*
+
+The terminal window to your right is already logged into the lab environment as the `rhel` user via SSH. All steps of this lab are to be completed as the `rhel` user on the bastion server.
+
+When you follow the next steps, you will have instructions followed by a small box with text that is meant to be used in the terminal. In the upper right corner there will be a couple of symbols. It should say something like "BASH", an icon of a clipboard, and an icon of a terminal.
+
+You should also be able to click the terminal icon and the command is then auto-typed into the machine terminal.
+
+Alternatively, you should be able to click the clipboard icon in the code box to copy the command, and you will either use the middle mouse button or right click and paste. The keyboard shortcuts for copy and paste (`Ctrl+C` and `Ctrl+V`) won't work in this environment.
+
+To move to the next step, click the *Next* button.
 ====
-
-== Summary
-
-In this module, you've:
-
-* Verified the fapolicyd installation and service status
-* Reviewed the default configuration in `/etc/fapolicyd/fapolicyd.conf`
-* Identified the default trust sources and integrity settings
-
-Click "Next" to see fapolicyd block an unauthorized application in the next module.

@@ -1,56 +1,64 @@
-= Explore Integrity Checking
+## Step 4:
+
+= Update the Trust Database
 
 == Overview
 
-Adding a binary to the trust database allows execution based on file location, but what happens if a trusted binary is replaced with something malicious? In this module, you'll explore fapolicyd's default behavior when a trusted executable is substituted.
+What if you know that the `cowsay` binary is trusted and you want to allow it on the system? You have a couple of options:
 
-== Step 1: Identify a Trusted Binary
+* Create an RPM spec file for the binary, build an RPM, sign it, and install it into the RPM database
+* Update the file-backed trust database
 
-The `more` command is installed via the RPM database, so it's trusted to execute on the system:
+The second option is better for this scenario. Let's update the file-backed trust database to allow `cowsay`.
 
-[source,bash,role=execute]
+== Step 1: Add the Binary to the Trust Database
+
+Use `fapolicyd-cli` to update the trust source:
+
+[source,bash,role="execute",subs=attributes+]
 ----
-sudo rpm -qf /bin/more
-----
-
-== Step 2: Verify fapolicyd Is Running
-
-First, let's verify that fapolicyd is still running:
-
-[source,bash,role=execute]
-----
-sudo systemctl status fapolicyd
+sudo fapolicyd-cli --file add /home/rhel/cowsay
 ----
 
-== Step 3: Substitute a Trusted Binary
+== Step 2: Review Trust Database Entries
 
-Now let's substitute the `more` command for the `cowsay` binary in our user's home directory:
+If we take a look at the file `/etc/fapolicyd/fapolicyd.trust`, we can see the changes that have been made:
 
-[source,bash,role=execute]
+[source,bash,role="execute",subs=attributes+]
 ----
-sudo /bin/cp ./cowsay /bin/more
-----
-
-== Step 4: Execute the Substituted Binary
-
-Run the substituted binary:
-
-[source,bash,role=execute]
-----
-/bin/more "mooooo"
+sudo cat /etc/fapolicyd/fapolicyd.trust
 ----
 
-[IMPORTANT]
+The trust entry includes:
+
+* The full path to the file (`/home/rhel/cowsay`)
+* The size of the file, calculated and added automatically
+* The SHA-256 hash for the file, calculated and added automatically
+
+[NOTE]
 ====
-By default, fapolicyd doesn't check what the file looks like—only where it is executing from. This means that an attacker could potentially hijack the execution path of a trusted file and execute malicious code on behalf of a user.
+Remember that we have `integrity = none` in our fapolicyd config file. The size and SHA-256 hash attributes are used for integrity checking, which we'll explore in a later module.
 ====
 
-== Summary
+== Step 3: Update the Daemon
 
-In this module, you've:
+Now update the daemon to apply the trust database changes:
 
-* Identified a trusted binary installed via the RPM database
-* Substituted a trusted system binary with an untrusted executable
-* Observed that fapolicyd allows the substituted binary to run without integrity checking enabled
+[source,bash,role="execute",subs=attributes+]
+----
+sudo fapolicyd-cli --update
+----
 
-Click "Next" to configure SHA-256 integrity checking to mitigate this risk.
+== Step 4: Verify Trusted Execution
+
+Let's try the binary again:
+
+[source,bash,role="execute",subs=attributes+]
+----
+./cowsay "mooooo"
+----
+
+Success! We've verified that fapolicyd can block unauthorized processes and applications on a system, and that we can manage exceptions for trusted applications.
+
+
+Click "Next" to explore fapolicyd integrity checking in the next module.
