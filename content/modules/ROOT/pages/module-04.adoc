@@ -1,8 +1,4 @@
-## Step 4:
-
-= Update the Trust Database
-
-== Overview
+## Step 4: Update the Trust Database
 
 What if you know that the `cowsay` binary is trusted and you want to allow it on the system? You have a couple of options:
 
@@ -11,19 +7,15 @@ What if you know that the `cowsay` binary is trusted and you want to allow it on
 
 The second option is better for this scenario. Let's update the file-backed trust database to allow `cowsay`.
 
-== Step 1: Add the Binary to the Trust Database
 
-Use `fapolicyd-cli` to update the trust source:
-
+**4.1** Use `fapolicyd-cli` to update the trust source:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo fapolicyd-cli --file add /home/rhel/cowsay
 ----
 
-== Step 2: Review Trust Database Entries
 
-If we take a look at the file `/etc/fapolicyd/fapolicyd.trust`, we can see the changes that have been made:
-
+**4.2** If we take a look at the file `/etc/fapolicyd/fapolicyd.trust`, we can see the changes that have been made:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo cat /etc/fapolicyd/fapolicyd.trust
@@ -40,19 +32,14 @@ The trust entry includes:
 Remember that we have `integrity = none` in our fapolicyd config file. The size and SHA-256 hash attributes are used for integrity checking, which we'll explore in a later module.
 ====
 
-== Step 3: Update the Daemon
 
-Now update the daemon to apply the trust database changes:
-
+**4.3** Now update the daemon to apply the trust database changes:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo fapolicyd-cli --update
 ----
 
-== Step 4: Verify Trusted Execution
-
-Let's try the binary again:
-
+**4.4** Let's try the binary again:
 [source,bash,role="execute",subs=attributes+]
 ----
 ./cowsay "mooooo"

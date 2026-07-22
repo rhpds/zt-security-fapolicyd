@@ -1,8 +1,4 @@
-## Step 6:
-
-= Configure Integrity Controls
-
-== Overview
+## Step 6: Configure Integrity Controls
 
 To mitigate situations where a trusted binary is substituted, fapolicyd supports different types of file integrity:
 
@@ -12,37 +8,35 @@ To mitigate situations where a trusted binary is substituted, fapolicyd supports
 
 For this scenario, we're going to use SHA-256 hashes to verify file integrity. This provides a good balance between speed and security, and is simple to set up and maintain.
 
-== Step 1: Enable SHA-256 Integrity Checking
 
-Configure integrity in the `/etc/fapolicyd/fapolicyd.conf` file:
-
+**6.1** Configure integrity in the `/etc/fapolicyd/fapolicyd.conf` file:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo sed -i 's/integrity.*/integrity = sha256/' /etc/fapolicyd/fapolicyd.conf
 ----
 
-== Step 2: Restart the Daemon
 
-Restart the daemon to apply the configuration change:
-
+**6.2** Restart the daemon to apply the configuration change:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo systemctl restart fapolicyd
 ----
 
-== Step 3: Verify Integrity Checking
-
-We can now verify whether file integrity checking is performed:
-
+**6.3** We can now verify whether file integrity checking is performed:
 [source,bash,role="execute",subs=attributes+]
 ----
 /bin/more "mooooooo"
 ----
 
-[source,text]
-----
+The Output should say 
+.....
+<<< OUTPUT ABRIDGED >>>
+
 -bash: /bin/more: Operation not permitted
-----
+
+<<< OUTPUT ABRIDGED >>>
+
+.....
 
 Success! We've now mitigated the risk of an attacker hijacking a trusted binary on the system by configuring fapolicyd integrity controls.
 

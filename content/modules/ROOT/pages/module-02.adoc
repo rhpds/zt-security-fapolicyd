@@ -1,9 +1,4 @@
-## Step 2: Verify fapolicyd Status
-
-
-= Installation & Configuration
-
-== Overview
+## Step 2: Verify fapolicyd Installation & Configuration
 
 The File Access Policy Daemon (fapolicyd) controls the execution of applications based on a user-defined policy. It is one of the most effective ways to mitigate the risk of untrusted and possibly malicious applications on the system.
 
@@ -14,14 +9,14 @@ Application control helps protect against unauthorized process execution. When i
 This lab uses RHEL, where the fapolicyd package is available but the service is disabled by default until you explicitly enable it.
 ====
 
-== Step 1: Verify fapolicyd Installation
 
-First, verify that fapolicyd is installed on your Red Hat Enterprise Linux system:
-
+**2.1** First, verify that fapolicyd is installed on your Red Hat Enterprise Linux system:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo systemctl status fapolicyd
 ----
+
+You may need to "Ctrl+c" on your keyboard to close out the systemctl status.
 
 The service exists but is disabled by default on installation:
 
@@ -32,10 +27,8 @@ The service exists but is disabled by default on installation:
      Active: inactive (dead)
 ----
 
-== Step 2: Review Default Configuration
 
-Next, inspect the fapolicyd configuration that has been created:
-
+**2.2** Next, inspect the fapolicyd configuration that has been created:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo cat /etc/fapolicyd/fapolicyd.conf

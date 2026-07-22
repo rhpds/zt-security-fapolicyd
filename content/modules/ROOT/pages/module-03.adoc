@@ -1,55 +1,46 @@
-## Step 3
-
-= Verify Application Blocking
-
-== Overview
+## Step 3: Verify Application Blocking
 
 Now that you've seen how the daemon is configured, let's see fapolicyd in action. You'll install an application from an internet source and observe how fapolicyd blocks execution of untrusted binaries.
 
-== Step 1: Extract an Untrusted Application
 
 Let's install a new application from an internet source, `cowsay`. There is nothing inherently malicious about this binary, though it provides a good example for our application control workflow.
 
-Extract `cowsay` into the user's home directory:
-
+**3.1** Extract `cowsay` into the user's home directory:
 [source,bash,role="execute",subs=attributes+]
 ----
 tar xsf cowsay_2.0.4_Linux_x86_64.tar.gz
 ----
 
-== Step 2: Execute Before fapolicyd Is Running
 
-You should have no problems executing the `cowsay` binary while fapolicyd is stopped:
-
+**3.2** You should have no problems executing the `cowsay` binary while fapolicyd is stopped:
 [source,bash,role="execute",subs=attributes+]
 ----
 ./cowsay "mooooo"
 ----
 
-== Step 3: Start fapolicyd
 
-Let's start up fapolicyd and see what happens:
-
+**3.3** Let's start up fapolicyd and see what happens:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo systemctl start fapolicyd
 ----
 
-== Step 4: Attempt Execution Again
 
-Now run the `cowsay` command again:
-
+**3.4** Now run the `cowsay` command again:
 [source,bash,role="execute",subs=attributes+]
 ----
 ./cowsay "mooooo"
 ----
 
 You'll obtain the following error:
+.....
+<<< OUTPUT ABRIDGED >>>
 
-[source,bash,role="execute",subs=attributes+]
-----
 -bash: ./cowsay: Operation not permitted
-----
+
+<<< OUTPUT ABRIDGED >>>
+
+.....
 
 [IMPORTANT]
 ====

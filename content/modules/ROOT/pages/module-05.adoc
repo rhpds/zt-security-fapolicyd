@@ -1,42 +1,29 @@
-## Step 5:
-
-= Explore Integrity Checking
-
-== Overview
+## Step 5: Explore Integrity Checking
 
 Adding a binary to the trust database allows execution based on file location, but what happens if a trusted binary is replaced with something malicious? In this module, you'll explore fapolicyd's default behavior when a trusted executable is substituted.
 
-== Step 1: Identify a Trusted Binary
 
-The `more` command is installed via the RPM database, so it's trusted to execute on the system:
-
+**5.1** The `more` command is installed via the RPM database, so it's trusted to execute on the system:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo rpm -qf /bin/more
 ----
 
-== Step 2: Verify fapolicyd Is Running
 
-First, let's verify that fapolicyd is still running:
-
+**5.2** Let's verify that fapolicyd is still running:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo systemctl status fapolicyd
 ----
 
-== Step 3: Substitute a Trusted Binary
-
-Now let's substitute the `more` command for the `cowsay` binary in our user's home directory:
-
+**5.3** Now let's substitute the `more` command for the `cowsay` binary in our user's home directory:
 [source,bash,role="execute",subs=attributes+]
 ----
 sudo /bin/cp ./cowsay /bin/more
 ----
 
-== Step 4: Execute the Substituted Binary
 
-Run the substituted binary:
-
+**5.4** Run the substituted binary:
 [source,bash,role="execute",subs=attributes+]
 ----
 /bin/more "mooooo"
